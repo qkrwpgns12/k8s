@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: fs-echo-ip-prod
+  name: fs-echo-ip-prod
+  namespace: prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fs-echo-ip-prod
+  template:
+    metadata:
+      labels:
+        app: fs-echo-ip-prod
+    spec:
+      containers:
+      - image: 10.25.240.21:8443/echo-ip
+        name: fs-echo-ip-prod
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: fs-echo-ip-prod
+  name: fs-echo-ip-prod-svc
+  namespace: prod
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: fs-echo-ip-prod
+  type: LoadBalancer
