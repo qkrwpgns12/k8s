@@ -16,7 +16,7 @@ metadata:
 data:
   alertmanager.yml: |
     global:
-      slack_api_url: https://hooks.slack.com/services/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
+      slack_api_url: https://hooks.slack.com/services/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
     receivers:
     - name: slack-notifier
       slack_configs:
