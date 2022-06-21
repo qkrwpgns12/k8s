@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+    meta.helm.sh/release-name: prometheus
+    meta.helm.sh/release-namespace: default
+  labels:
+    app: prometheus
+    app.kubernetes.io/managed-by: Helm
+    chart: prometheus-15.10.1
+    component: alertmanager
+    heritage: Helm
+    release: prometheus
+  name: prometheus-notifier-config
+  namespace: default
+data:
+  alertmanager.yml: |
+    global:
+      slack_api_url: https://hooks.slack.com/services/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
+    receivers:
+    - name: slack-notifier
+      slack_configs:
+      - channel: #k8s-node-notice
+        send_resolved: true
+        title: '[{{.Status | toUpper}}] {{ .CommonLabels.alertname }}'
+        text: >-
+          *Description:* {{ .CommonAnnotations.description }}
+    route:
+      group_wait: 10s
+      group_interval: 1m
+      repeat_interval: 5m
+      receiver: slack-notifier
